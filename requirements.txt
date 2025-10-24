@@ -16,3 +16,4 @@ requests==2.31.0
 urllib3==2.2.1
 psycopg2-binary==2.9.9
 dj-database-url==2.1.0
+textblob==0.17.1
