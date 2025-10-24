@@ -211,19 +211,19 @@ SERVER_EMAIL = 'server@PandaStories.com'
 EMAIL_SUBJECT_PREFIX = '[PandaStories] '
 
 # Logging configuration
+# Use console logging in production (Vercel has read-only filesystem)
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
-        'file': {
+        'console': {
             'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'debug.log'),
+            'class': 'logging.StreamHandler',
         },
     },
     'loggers': {
         'django': {
-            'handlers': ['file'],
+            'handlers': ['console'],
             'level': 'INFO',
             'propagate': True,
         },
