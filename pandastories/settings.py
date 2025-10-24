@@ -168,11 +168,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-    BASE_DIR / 'blog/static',
+    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'blog', 'static'),
 ]
+
+# Debug: Print static files configuration (will show in Vercel logs)
+if not os.environ.get('DEBUG'):
+    import sys
+    print(f"STATIC_ROOT: {STATIC_ROOT}", file=sys.stderr)
+    print(f"STATIC_ROOT exists: {os.path.exists(STATIC_ROOT)}", file=sys.stderr)
+    if os.path.exists(STATIC_ROOT):
+        print(f"Files in STATIC_ROOT: {os.listdir(STATIC_ROOT)[:10]}", file=sys.stderr)
 
 # Storage configuration
 # Use Supabase Storage for media files in production
