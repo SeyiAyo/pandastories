@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>{% block title %}{% endblock %} | PandaStories</title>
+        <link rel="stylesheet" href="https://unpkg.com/bulma@0.9.4/css/bulma.min.css" />
+        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'css/bulma-divider.min.css' %}">        
+        
+        <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+    
+            body {font-family: 'Nunito', sans-serif;}
+    
+            nav.navbar {
+                height: 6rem !important;
+                box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06) !important;
+            }
+            :root{
+        ::-webkit-scrollbar{height:10px;width:10px}::-webkit-scrollbar-track{background:#efefef;border-radius:6px}::-webkit-scrollbar-thumb{background:#d5d5d5;border-radius:6px}::-webkit-scrollbar-thumb:hover{background:#c4c4c4}
+        }
+            ::selection{color: lavender; background-color:black;}
+        </style>
+    </head>
+
+    <body>
+        <!-- START NAV -->
+        <nav class="navbar" style="background-color: gray;">
+            <div class="container">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="{% url 'frontpage' %}">
+                <strong class="title">myPanda Blog</strong>
+                </a>
+                <span class="navbar-burger burger" data-target="navbarMenu">
+                <span></span>
+                <span></span>
+                <span></span>
+                </span>
+            </div>
+            <div id="navbarMenu" class="navbar-menu">
+                <div class="navbar-end">
+                <div class=" navbar-item">
+                    <form action="{% url 'search' %}" method="get">
+                    <div class="control has-icons-left">
+                        <input class="input is-rounded" name="query" type="text" placeholder="Search">
+                        <span class="icon is-left">
+                            <i src="{% static 'images/search.png' %}" class="fa fa-search"></i>
+                        </span>
+                    </div>
+                    </form>
+                </div>
+                <a href="{% url 'frontpage' %}" class="navbar-item is-active is-size-5 has-text-weight-semibold">
+                    Home
+                </a>
+                <a href="{% url 'about' %}" class="navbar-item is-size-5 has-text-weight-semibold">
+                    About
+                </a>
+                <a href="{% url 'contact' %}" class="navbar-item is-size-5 has-text-weight-semibold">
+                    Contact Us
+                </a>
+                </div>
+            </div>
+            </div>
+        </nav>
+        <!-- END NAV -->
+
+        {% block content %}
+        {% endblock %}
+
+        <footer class="footer">
+            <div class="content has-text-centered">
+                <p>
+                    <strong>myPanda Blog</strong> by <a href="https://github.com/SeyiAyo">Panda</a>. The source code is licensed
+                    <a href="http://opensource.org/licenses/mit-license.php">MIT</a>.
+                </p>
+            </div>
+        </footer>
+
+            <script>var simplemde = new SimpleMDE({element: document.getElementById("id_content")});</script>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+            
+                  // Get all "navbar-burger" elements
+                    const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+            
+                  // Check if there are any navbar burgers
+                    if ($navbarBurgers.length > 0) {
+            
+                    // Add a click event on each of them
+                    $navbarBurgers.forEach(el => {
+                            el.addEventListener('click', () => {
+            
+                        // Get the target from the "data-target" attribute
+                        const target = el.dataset.target;
+                        const $target = document.getElementById(target);
+            
+                        // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                        el.classList.toggle('is-active');
+                        $target.classList.toggle('is-active');
+            
+                        });
+                    });
+                    }
+            
+                });
+            </script>
+    </body>
+</html>

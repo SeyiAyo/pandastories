@@ -1,0 +1,189 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block meta_description %}A personal blog about technology, programming, and life.{% endblock %}">
+    <meta name="author" content="Oluwaseyi Ayoola">
+    <meta name="theme-color" content="#3b82f6">
+    
+    <title>{% block title %}{% endblock %} | PandaStories</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="{% static 'css/main.css' %}" as="style">
+    <link rel="preload" href="{% static 'js/main.js' %}" as="script">
+    <link rel="preload" href="{% static 'images/favicon.png' %}" as="image">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
+    <link rel="apple-touch-icon" href="{% static 'images/favicon.png' %}">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    
+    {% block extra_css %}{% endblock %}
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="{% block og_title %}{{ block.super }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ meta_description }}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{% static 'images/favicon.png' %}{% endblock %}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    
+    <!-- Twitter Card tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}{{ block.super }}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{{ meta_description }}{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{% static 'images/favicon.png' %}{% endblock %}">
+</head>
+<body class="h-full flex flex-col bg-gray-100 font-family-karla">
+    <!-- Skip to main content -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 bg-blue-600 text-white px-4 py-2">
+        Skip to main content
+    </a>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <a href="{% url 'blog:frontpage' %}" class="text-2xl font-bold text-blue-600">myPanda<span class="text-gray-800">Blog</span></a>
+                    </div>
+                    <div class="hidden md:ml-6 md:flex md:space-x-8">
+                        <a href="{% url 'blog:frontpage' %}" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900">Home</a>
+                        <a href="{% url 'blog:about' %}" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-900">About</a>
+                        <a href="{% url 'blog:contact' %}" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-900">Contact</a>
+                    </div>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <div class="flex items-center md:hidden">
+                    <button type="button" class="mobile-menu-button inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100">
+                        <span class="sr-only">Open main menu</span>
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div class="hidden mobile-menu md:hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="{% url 'blog:frontpage' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Home</a>
+                <a href="{% url 'blog:about' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">About</a>
+                <a href="{% url 'blog:contact' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" class="flex-grow container mx-auto px-4 py-8">
+        {% if messages %}
+        <div class="mb-8" role="alert" aria-live="polite">
+            {% for message in messages %}
+            <div class="p-4 {% if message.tags == 'success' %}bg-green-100 text-green-700{% elif message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-blue-100 text-blue-700{% endif %} rounded-lg flex items-center justify-between animate-fadeIn">
+                <div class="flex items-center">
+                    <i class="{% if message.tags == 'success' %}fas fa-check-circle{% elif message.tags == 'error' %}fas fa-exclamation-circle{% else %}fas fa-info-circle{% endif %} mr-3"></i>
+                    <p>{{ message }}</p>
+                </div>
+                <button type="button" class="text-gray-500 hover:text-gray-700" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                    <span class="sr-only">Close message</span>
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white shadow-lg mt-12">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">About PandaStories</h3>
+                    <p class="text-gray-600">Your ultimate source for insightful content, inspiration, and everything in between.</p>
+                    
+                    <!-- Newsletter Signup -->
+                    <div class="mt-6">
+                        <h4 class="text-md font-semibold text-gray-900 mb-2">Subscribe to Our Newsletter</h4>
+                        <form action="{% url 'blog:newsletter_signup' %}" method="POST" class="flex space-x-2">
+                            {% csrf_token %}
+                            <input type="email" name="email" required 
+                                   class="flex-1 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                   placeholder="Enter your email">
+                            <button type="submit" 
+                                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                Subscribe
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="{% url 'blog:about' %}" class="text-gray-600 hover:text-gray-900">About Us</a></li>
+                        <li><a href="{% url 'blog:contact' %}" class="text-gray-600 hover:text-gray-900">Contact</a></li>
+                        <li><a href="{% url 'blog:privacy_policy' %}" class="text-gray-600 hover:text-gray-900">Privacy Policy</a></li>
+                        <li><a href="{% url 'blog:terms_conditions' %}" class="text-gray-600 hover:text-gray-900">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Follow Us</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-gray-500">
+                            <i class="fab fa-twitter fa-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-gray-500">
+                            <i class="fab fa-facebook fa-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-gray-500">
+                            <i class="fab fa-instagram fa-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-gray-500">
+                            <i class="fab fa-github fa-lg"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 border-t border-gray-200 pt-8">
+                <p class="text-center text-gray-400">&copy; {% now "Y" %} PandaStories. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cookie Consent -->
+    <div id="cookie-consent" class="hidden fixed bottom-0 left-0 right-0 bg-gray-900 text-white p-4 transform transition-transform duration-300 ease-in-out z-50">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <p class="text-sm">
+                We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.
+                <a href="{% url 'blog:privacy_policy' %}" class="underline hover:text-blue-300">Learn more</a>
+            </p>
+            <button id="accept-cookies" class="ml-4 px-4 py-2 bg-white text-gray-900 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white">
+                Accept
+            </button>
+        </div>
+    </div>
+
+    <!-- Back to top button -->
+    <button id="back-to-top" class="fixed bottom-4 right-4 bg-blue-600 text-white p-2 rounded-full shadow-lg opacity-0 transition-opacity duration-300 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <script src="{% static 'js/main.js' %}" defer></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

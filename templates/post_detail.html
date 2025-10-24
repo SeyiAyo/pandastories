@@ -1,0 +1,324 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load blog_tags %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block meta %}
+{{ post|jsonld_blog_post }}
+{% meta_tags post=post %}
+{% endblock %}
+
+{% block meta_description %}{{ post.meta_description }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* CKEditor Content Styling */
+    .ck-content, .ck-editor__editable {
+        font-family: system-ui, -apple-system, sans-serif;
+        line-height: 1.75;
+        color: #000000 !important;
+    }
+    .ck-content h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        margin: 2rem 0 1rem;
+        color: #000000;
+    }
+    .ck-content h2 {
+        font-size: 1.875rem;
+        font-weight: 600;
+        margin: 1.75rem 0 1rem;
+        color: #000000;
+    }
+    .ck-content h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 1.5rem 0 1rem;
+        color: #000000;
+    }
+    .ck-content p {
+        margin: 1.25rem 0;
+        color: #000000;
+    }
+    .ck-content ul, .ck-content ol {
+        margin: 1.25rem 0;
+        padding-left: 2rem;
+    }
+    .ck-content li {
+        margin: 0.5rem 0;
+    }
+    .ck-content blockquote {
+        border-left: 4px solid #E5E7EB;
+        padding-left: 1rem;
+        margin: 1.5rem 0;
+        font-style: italic;
+        color: #4B5563;
+    }
+    .ck-content code {
+        background: #F3F4F6;
+        padding: 0.2rem 0.4rem;
+        border-radius: 0.25rem;
+        font-family: ui-monospace, monospace;
+        font-size: 0.875em;
+    }
+    .ck-content pre {
+        background: #1F2937;
+        color: #F9FAFB;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        overflow-x: auto;
+        margin: 1.5rem 0;
+    }
+    .ck-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 0.5rem;
+        margin: 1.5rem 0;
+    }
+    .ck-content table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.5rem 0;
+    }
+    .ck-content th, .ck-content td {
+        border: 1px solid #E5E7EB;
+        padding: 0.75rem;
+    }
+    .ck-content th {
+        background: #F9FAFB;
+        font-weight: 600;
+    }
+    .ck-content a {
+        color: #2563EB;
+        text-decoration: underline;
+    }
+    .ck-content a:hover {
+        color: #1D4ED8;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <article class="bg-white rounded-lg shadow-lg overflow-hidden mb-12">
+        {% if post.image %}
+        <div class="relative w-full h-[32rem]">
+            <img src="{{ post.image.url }}" 
+                 alt="{{ post.title }}"
+                 class="w-full h-full object-cover"
+                 loading="lazy">
+        </div>
+        {% endif %}
+        
+        <div class="p-8">
+            <div class="flex items-center space-x-4 mb-6">
+                <a href="{% url 'blog:category_detail' post.category.slug %}" 
+                   class="bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full hover:bg-blue-200 transition-colors duration-200">
+                    {{ post.category.title }}
+                </a>
+                <div class="flex items-center space-x-2 text-gray-500">
+                    <img src="{% static 'images/default-avatar.png' %}" alt="{{ post.author }}" class="w-8 h-8 rounded-full">
+                    <span class="text-sm">{{ post.author }}</span>
+                    <span>•</span>
+                    <time datetime="{{ post.created_at|date:'Y-m-d' }}" class="text-sm">
+                        {{ post.created_at|date:"M d, Y" }}
+                    </time>
+                </div>
+            </div>
+            
+            <h1 class="text-4xl font-bold text-gray-900 mb-6">{{ post.title }}</h1>
+            
+            <div class="mb-8 flex items-center space-x-4 text-gray-600">
+                <div class="flex items-center">
+                    <i class="far fa-eye mr-2"></i>
+                    <span>{{ post.views_count }} views</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="far fa-comments mr-2"></i>
+                    <span>{{ post.comment_count }} comments</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="far fa-clock mr-2"></i>
+                    <span>{{ post.reading_time }} min read</span>
+                </div>
+            </div>
+
+            <div class="prose prose-lg max-w-none ck-content">
+                {% if post.intro %}
+                <div class="text-xl text-gray-600 mb-8">
+                    {{ post.intro|safe }}
+                </div>
+                {% endif %}
+                {{ post.content|safe }}
+            </div>
+
+            <div class="mt-8 pt-8 border-t border-gray-200">
+                <div class="flex items-center justify-end space-x-4">
+                    <form method="post" action="{% url 'blog:post_detail' post.category.slug post.slug %}" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" name="save_post" class="text-gray-500 hover:text-blue-600 transition-colors duration-200">
+                            <i class="{% if is_saved %}fas{% else %}far{% endif %} fa-bookmark mr-1"></i>
+                            {{ is_saved|yesno:"Saved,Save" }}
+                        </button>
+                    </form>
+                    <div class="flex space-x-4">
+                        <a href="https://twitter.com/intent/tweet?text={{ post.title|urlencode }}&url={{ request.build_absolute_uri }}" 
+                           target="_blank" rel="noopener noreferrer"
+                           class="text-gray-500 hover:text-blue-600 transition-colors duration-200">
+                            <i class="fab fa-twitter mr-1"></i>
+                            Tweet
+                        </a>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri|urlencode }}" 
+                           target="_blank" rel="noopener noreferrer"
+                           class="text-gray-500 hover:text-blue-600 transition-colors duration-200">
+                            <i class="fab fa-facebook mr-1"></i>
+                            Share
+                        </a>
+                        <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri|urlencode }}&title={{ post.title|urlencode }}" 
+                           target="_blank" rel="noopener noreferrer"
+                           class="text-gray-500 hover:text-blue-600 transition-colors duration-200">
+                            <i class="fab fa-linkedin mr-1"></i>
+                            Share
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <!-- Recommended Posts -->
+    <div class="bg-white rounded-lg shadow-lg p-8 mb-12">
+        <h2 class="text-2xl font-bold mb-6 text-gray-900">Recommended Posts</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {% for recommendation in recommendations %}
+                <a href="{% url 'blog:post_detail' recommendation.category.slug recommendation.slug %}" 
+                   class="group block rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
+                    {% if recommendation.image %}
+                    <div class="relative h-48">
+                        <img src="{{ recommendation.image.url }}" 
+                             alt="{{ recommendation.title }}"
+                             class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+                             loading="lazy">
+                    </div>
+                    {% endif %}
+                    <div class="p-6">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <span class="text-blue-600 text-sm">{{ recommendation.category.title }}</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-500 text-sm">{{ recommendation.created_at|date:"M d, Y" }}</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors duration-200">
+                            {{ recommendation.title }}
+                        </h3>
+                        <p class="mt-2 text-gray-600 line-clamp-2">{{ recommendation.intro }}</p>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Related Posts Section -->
+    <div class="bg-white rounded-lg shadow-lg p-8 mb-12">
+        <h2 class="text-2xl font-bold mb-6 text-gray-900">Related Posts</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {% for related in related_posts %}
+                <a href="{{ related.get_absolute_url }}" class="block group">
+                    <div class="bg-gray-50 rounded-lg p-6 transition duration-300 hover:bg-gray-100">
+                        <h3 class="text-xl font-semibold text-gray-900 group-hover:text-blue-600 mb-2">{{ related.title }}</h3>
+                        <p class="text-gray-600 mb-4">{{ related.intro|striptags|truncatewords:20 }}</p>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <span class="mr-3">{{ related.created_at|date:"M d, Y" }}</span>
+                            <span>{{ related.comment_count }} comments</span>
+                        </div>
+                    </div>
+                </a>
+            {% empty %}
+                <p class="text-gray-600">No related posts found.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Comments Section -->
+    <div class="bg-white rounded-lg shadow-lg p-8 mt-8">
+        <h2 class="text-2xl font-bold mb-8 text-gray-900">Discussion ({{ post.comment_count }})</h2>
+        
+        {% if messages %}
+        <div class="mb-8">
+            {% for message in messages %}
+            <div class="p-4 {% if message.tags == 'success' %}bg-green-100 text-green-700{% elif message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-blue-100 text-blue-700{% endif %} rounded-md">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Comment Form -->
+        <form class="mb-12" method="post">
+            {% csrf_token %}
+            <div class="mb-6">
+                <label for="id_name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                {{ form.name }}
+                {% if form.name.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.name.errors.0 }}</p>
+                {% endif %}
+            </div>
+            <div class="mb-6">
+                <label for="id_email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.email.errors.0 }}</p>
+                {% endif %}
+            </div>
+            <div class="mb-6">
+                <label for="id_contents" class="block text-sm font-medium text-gray-700 mb-1">Comment</label>
+                {{ form.contents }}
+                {% if form.contents.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.contents.errors.0 }}</p>
+                {% endif %}
+            </div>
+            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors duration-200">
+                Post Comment
+            </button>
+        </form>
+
+        <!-- Comments List -->
+        <div class="space-y-8">
+            {% for comment in comments %}
+            <div class="flex space-x-4 pb-6 {% if not forloop.last %}border-b border-gray-200{% endif %}">
+                <div class="flex-shrink-0">
+                    <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                        <span class="text-blue-600 font-semibold">{{ comment.name|slice:":1"|upper }}</span>
+                    </div>
+                </div>
+                <div class="flex-grow">
+                    <div class="flex items-center justify-between mb-1">
+                        <div class="flex items-center space-x-2">
+                            <span class="font-medium text-gray-900">{{ comment.name }}</span>
+                            <span class="text-gray-500 text-sm">{{ comment.created_at|date:"M d, Y" }}</span>
+                        </div>
+                        <div class="text-sm">
+                            {% if comment.sentiment == 'positive' %}
+                                <span class="text-green-600">😊 Positive</span>
+                            {% elif comment.sentiment == 'negative' %}
+                                <span class="text-red-600">😔 Negative</span>
+                            {% else %}
+                                <span class="text-gray-600">😐 Neutral</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <p class="text-gray-700 whitespace-pre-line">{{ comment.contents }}</p>
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center py-8">
+                <div class="text-gray-400 mb-2">
+                    <i class="far fa-comments text-4xl"></i>
+                </div>
+                <p class="text-gray-500">No comments yet. Be the first to share your thoughts!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

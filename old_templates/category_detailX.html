@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ category.title }}{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-body">
+        <div class="container">
+            {% for post in category.posts.all %}
+                <section class="section">
+                    <div class="columns">
+                        <div class="column is-8 is-offset-2">
+                            <div class="content is-medium">
+                                <h2 class="subtitle is-4">{{ post.created_at | date:"M d, Y" }}</h2>
+                                <a href="{% url 'post_detail' post.slug %}"><h1 class="title">{{ post.title }}</h1></a>
+                                {% if post.image %}
+                                <div class="columns">
+                                    <div class="column is-8 is-offset-2">
+                                        <figure class="image is-16by9">
+                                            <img src="{{ post.image.url }}" alt="">
+                                        </figure>
+                                    </div>
+                                {% endif %}
+                                <p>{{ post.intro }}</p>
+                                category: <a href="{% url 'category_detail' post.category.slug %}">{{ post.category.title }}</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+        
+                <div class="is-divider"></div>
+            {% endfor %}
+
+            
+{% endblock %}

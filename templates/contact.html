@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Contact Us" %}{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+            <div class="grid md:grid-cols-2 gap-0">
+                <!-- Contact Info -->
+                <div class="p-8 bg-blue-100">
+                    <h1 class="text-3xl font-extrabold text-gray-900 mb-6">{% trans "Get in Touch" %}</h1>
+                    <p class="text-gray-700 mb-8 text-lg leading-relaxed">
+                        {% trans "We value your feedback and inquiries. Whether you have a question, suggestion, or just want to say hello, feel free to reach out to us." %}
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-center space-x-4 text-gray-700">
+                            <div class="flex-shrink-0">
+                                <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-200 text-blue-700">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold">{% trans "Email" %}</h3>
+                                <p>contact@mypanda.com</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4 text-gray-700">
+                            <div class="flex-shrink-0">
+                                <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-200 text-blue-700">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold">{% trans "Phone" %}</h3>
+                                <p>+1 (555) 123-4567</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4 text-gray-700">
+                            <div class="flex-shrink-0">
+                                <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-200 text-blue-700">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold">{% trans "Location" %}</h3>
+                                <p>123 Blog Street, Content City</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-12">
+                        <h3 class="text-gray-900 font-semibold mb-4">{% trans "Connect With Us" %}</h3>
+                        <div class="flex space-x-4">
+                            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" 
+                               class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-200 text-blue-700 hover:bg-blue-300 transition-colors duration-300">
+                                <span class="sr-only">Facebook</span>
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"
+                               class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-200 text-blue-700 hover:bg-blue-300 transition-colors duration-300">
+                                <span class="sr-only">Twitter</span>
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
+                               class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-200 text-blue-700 hover:bg-blue-300 transition-colors duration-300">
+                                <span class="sr-only">LinkedIn</span>
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">{% trans "Send us a Message" %}</h2>
+                    <form method="post" class="space-y-6">
+                        {% csrf_token %}
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700">{% trans "Name" %}</label>
+                            <input type="text" name="name" id="name" required
+                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-400 focus:ring-blue-400">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700">{% trans "Email" %}</label>
+                            <input type="email" name="email" id="email" required
+                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-400 focus:ring-blue-400">
+                        </div>
+                        <div>
+                            <label for="subject" class="block text-sm font-medium text-gray-700">{% trans "Subject" %}</label>
+                            <input type="text" name="subject" id="subject" required
+                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-400 focus:ring-blue-400">
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-700">{% trans "Message" %}</label>
+                            <textarea name="message" id="message" rows="4" required
+                                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-400 focus:ring-blue-400"></textarea>
+                        </div>
+                        <div class="flex items-center justify-end">
+                            <button type="submit"
+                                    class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 transition-colors duration-300">
+                                <i class="fas fa-paper-plane mr-2"></i>
+                                {% trans "Send Message" %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

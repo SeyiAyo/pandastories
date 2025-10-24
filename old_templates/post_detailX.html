@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+{% load markdown_deux_tags %}
+<section class="hero">
+    <div class="hero-body">
+        <div class="container">
+                <section class="section">
+                    <div class="columns">
+                        <div class="column is-8 is-offset-2">
+                            {% if post.image %}
+                                        <figure class="image is-16by9">
+                                            <img src="{{ post.image.url }}" alt="">
+                                        </figure>
+                                {% endif %}
+                            <div class="content is-medium">
+                                <h2 class="subtitle is-4">{{ post.created_at | date:"M d, Y" }}</h2>
+                                <a href="{% url 'post_detail' post.slug %}"><h1 class="title">{{ post.title }}</h1></a>
+                                <div class="control">
+                                    <a href="{% url 'category_detail' post.category.slug %}">
+                                        <span class="tag is-info is-uppercase ">{{ post.category.title }}</span>
+                                    </a>
+                                </div>
+
+                                <p>{{ post.content | markdown }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+        
+                <div class="is-divider"></div>
+
+                <section>
+                    <div class="container">
+                        <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+                
+                            <a class="button bd-fat-button is-info is-light bd-pagination-prev" href="#" title="previous article">
+                                <span class="icon is-left">
+                                    <i class="fa fa-arrow-left"></i>
+                                </span>
+
+                                <span>
+                                    <strong>Previous Article</strong>
+                                </span>
+                            </a>
+                
+                            <a class="button bd-fat-button is-info is-light bd-pagination-prev" href="#" title="next article">
+                                <strong>Next Article</strong>
+                                <span class="icon is-left">
+                                    <i class="fa fa-arrow-right"></i>
+                                </span>
+                            
+                                <span>
+                                </span>
+                            </a>
+                        </nav>
+                    </div>
+
+                </section>
+
+                <div class="is-divider"></div>
+                        <h2 class="subtitle is-4">Leave a comment</h2>
+
+                        <form action="{% url 'post_detail' post.slug %}" method="post">
+                            {% csrf_token %}
+
+                            {{ form.errors }}
+
+                            {% for field in form %}
+                                <div class="field">
+                                    <label class="label">{{ field.label }}</label>
+                                    {{ field }}
+                                </div>
+                            {% endfor %}
+                            <div class="field">
+                                <div class="control">
+                                    <button class="button is-success" type="button" onclick="this.form.submit()">Submit</button>
+                                </div>
+                            </div>
+                        
+                        </form>
+
+                        <hr>
+
+                        <div class="container">
+                            {% if not post.comments.all %}
+                                <p>No comments yet</p>
+                            {% endif %}
+
+                            {% for comment in post.comments.all %}
+                                <article class="media box">
+                                    <div class="media-content">
+                                        <strong>{{ comment.name }}</strong> <small>{{ comment.created_at | timesince }} ago</small><br>
+                                        {{ comment.contents }}
+                                    </div>
+                                </article>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

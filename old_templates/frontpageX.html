@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+{% load markdown_deux_tags %}
+        <section class="hero">
+            <div class="hero-body">
+                <div class="container">
+                    {% for post in posts %}
+                        <section class="section">
+                            <div class="columns">
+                                <div class="column is-8 is-offset-2">
+                                    {% if post.image %}
+                                        <figure class="image is-16by9">
+                                            <img src="{{ post.image.url }}" alt="">
+                                        </figure>
+                                        {% endif %}
+                                    <div class="content is-medium">
+                                        <h2 class="subtitle is-4">{{ post.created_at | date:"M d, Y" }}</h2>
+                                        <a href="{% url 'post_detail' post.slug %}"><h1 class="title">{{ post.title }}</h1></a>
+                                        
+                                        <p>{{ post.intro }}</p>
+                                        category: <a href="{% url 'category_detail' post.category.slug %}">{{ post.category.title }}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                
+                        <div class="is-divider"></div>
+                    {% endfor %}
+                        <!-- newsletter -->
+                        <section class="section">
+                            <div class="columns">
+                            <div class="column is-10 is-offset-1">
+                                <div class="container has-text-centered is-fluid">
+                                <div class="hero is-light">
+                                    <div class="hero-body">
+                                    <h2 class="title is-4">Sign up for our newsletter</h2>
+                                        <div class="column is-6 is-offset-3">
+                                        <div class="field has-addons has-addons-centered">
+                                            <div class="control is-expanded">
+                                            <input class="input " type="text" placeholder="Email address">
+                                            </div>
+                                            <div class="control">
+                                            <a class="button is-info">
+                                                Subscribe
+                                            </a>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                        </section>
+                </div>
+            </div>
+        </section>
+{% endblock %}

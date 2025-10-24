@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+            <!-- Header Section -->
+            <div class="p-8 bg-blue-100">
+                <h1 class="text-3xl font-extrabold text-gray-900 mb-6">About myPanda</h1>
+                <p class="text-gray-700 text-lg leading-relaxed">
+                    myPanda is more than just a blog; it's a vibrant community of thinkers, creators, and enthusiasts from all walks of life. Whether you're a seasoned professional seeking career advice, a hobbyist looking for creative inspiration, or simply someone eager to explore new ideas, myPanda is your virtual sanctuary.
+                </p>
+            </div>
+
+            <!-- Content Sections -->
+            <div class="p-8 space-y-12">
+                <!-- What We Offer Section -->
+                <section>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">What We Offer</h2>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-blue-50 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+                            <div class="flex items-center mb-4">
+                                <div class="flex-shrink-0">
+                                    <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-200 text-blue-700">
+                                        <i class="fas fa-newspaper"></i>
+                                    </div>
+                                </div>
+                                <h3 class="ml-4 text-lg font-semibold text-gray-900">Diverse Content</h3>
+                            </div>
+                            <p class="text-gray-600">From tech trends to travel tips, wellness advice to world news, myPanda covers a wide array of topics curated to pique your interest and expand your horizons.</p>
+                        </div>
+                        <div class="bg-blue-50 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+                            <div class="flex items-center mb-4">
+                                <div class="flex-shrink-0">
+                                    <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-200 text-blue-700">
+                                        <i class="fas fa-lightbulb"></i>
+                                    </div>
+                                </div>
+                                <h3 class="ml-4 text-lg font-semibold text-gray-900">Expert Insights</h3>
+                            </div>
+                            <p class="text-gray-600">Our team of writers and contributors are experts in their respective fields, delivering well-researched, thought-provoking articles that provide valuable insights and actionable advice.</p>
+                        </div>
+                        <div class="bg-blue-50 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+                            <div class="flex items-center mb-4">
+                                <div class="flex-shrink-0">
+                                    <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-200 text-blue-700">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                </div>
+                                <h3 class="ml-4 text-lg font-semibold text-gray-900">Community Engagement</h3>
+                            </div>
+                            <p class="text-gray-600">We believe in the power of community. Join the conversation, share your thoughts, and connect with like-minded individuals through our interactive platform and social channels.</p>
+                        </div>
+                        <div class="bg-blue-50 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+                            <div class="flex items-center mb-4">
+                                <div class="flex-shrink-0">
+                                    <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-200 text-blue-700">
+                                        <i class="fas fa-rocket"></i>
+                                    </div>
+                                </div>
+                                <h3 class="ml-4 text-lg font-semibold text-gray-900">Inspiration & Motivation</h3>
+                            </div>
+                            <p class="text-gray-600">Whether you're seeking motivation to pursue your passions or inspiration to overcome challenges, myPanda is here to uplift and empower you on your journey.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Why Choose Us Section -->
+                <section>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Why Choose myPanda</h2>
+                    <div class="space-y-6">
+                        <div class="flex items-start p-6 bg-blue-50 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+                            <div class="flex-shrink-0">
+                                <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-200 text-blue-700">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-semibold text-gray-900">Quality Content</h3>
+                                <p class="mt-2 text-gray-600">We're committed to delivering content that informs, entertains, and inspires. Each article is meticulously crafted to ensure relevance, accuracy, and readability.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start p-6 bg-blue-50 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+                            <div class="flex-shrink-0">
+                                <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-200 text-blue-700">
+                                    <i class="fas fa-user-friends"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-semibold text-gray-900">User-Friendly Experience</h3>
+                                <p class="mt-2 text-gray-600">Navigating myPanda is a breeze. Our intuitive interface and user-friendly design make it easy to find the content you love and discover new favorites.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start p-6 bg-blue-50 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+                            <div class="flex-shrink-0">
+                                <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-200 text-blue-700">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-semibold text-gray-900">Trusted Platform</h3>
+                                <p class="mt-2 text-gray-600">Your trust is our priority. We maintain high standards of content quality, user privacy, and community guidelines to ensure a safe and enriching environment for all.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
