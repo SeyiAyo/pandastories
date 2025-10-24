@@ -167,23 +167,23 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-    os.path.join(BASE_DIR, 'blog', 'static'),
-]
-
-# Debug: Print static files configuration (will show in Vercel logs)
-import sys
-print(f"[STATIC DEBUG] STATIC_ROOT: {STATIC_ROOT}", file=sys.stderr)
-print(f"[STATIC DEBUG] STATIC_ROOT exists: {os.path.exists(STATIC_ROOT)}", file=sys.stderr)
-print(f"[STATIC DEBUG] Current directory: {os.getcwd()}", file=sys.stderr)
-if os.path.exists(STATIC_ROOT):
-    files = os.listdir(STATIC_ROOT)
-    print(f"[STATIC DEBUG] Directories in STATIC_ROOT: {files}", file=sys.stderr)
+# Static files - serve from Supabase in production
+if os.environ.get('SUPABASE_URL'):
+    # Production: Serve static files from Supabase Storage
+    STATIC_URL = f"{os.environ.get('SUPABASE_URL')}/storage/v1/object/public/static/"
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'static'),
+        os.path.join(BASE_DIR, 'blog', 'static'),
+    ]
 else:
-    print(f"[STATIC DEBUG] STATIC_ROOT does not exist!", file=sys.stderr)
+    # Local development: Serve from filesystem
+    STATIC_URL = '/static/'
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'static'),
+        os.path.join(BASE_DIR, 'blog', 'static'),
+    ]
 
 # Storage configuration
 # Use Supabase Storage for media files in production
