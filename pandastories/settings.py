@@ -175,12 +175,15 @@ STATICFILES_DIRS = [
 ]
 
 # Debug: Print static files configuration (will show in Vercel logs)
-if not os.environ.get('DEBUG'):
-    import sys
-    print(f"STATIC_ROOT: {STATIC_ROOT}", file=sys.stderr)
-    print(f"STATIC_ROOT exists: {os.path.exists(STATIC_ROOT)}", file=sys.stderr)
-    if os.path.exists(STATIC_ROOT):
-        print(f"Files in STATIC_ROOT: {os.listdir(STATIC_ROOT)[:10]}", file=sys.stderr)
+import sys
+print(f"[STATIC DEBUG] STATIC_ROOT: {STATIC_ROOT}", file=sys.stderr)
+print(f"[STATIC DEBUG] STATIC_ROOT exists: {os.path.exists(STATIC_ROOT)}", file=sys.stderr)
+print(f"[STATIC DEBUG] Current directory: {os.getcwd()}", file=sys.stderr)
+if os.path.exists(STATIC_ROOT):
+    files = os.listdir(STATIC_ROOT)
+    print(f"[STATIC DEBUG] Directories in STATIC_ROOT: {files}", file=sys.stderr)
+else:
+    print(f"[STATIC DEBUG] STATIC_ROOT does not exist!", file=sys.stderr)
 
 # Storage configuration
 # Use Supabase Storage for media files in production

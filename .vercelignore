@@ -1,0 +1,13 @@
+# Don't ignore staticfiles - we need them!
+!staticfiles/
+
+# Ignore these
+*.pyc
+__pycache__/
+.env
+.env.*
+venv/
+.venv/
+db.sqlite3
+media/
+*.log
