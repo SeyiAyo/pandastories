@@ -78,7 +78,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -175,7 +174,7 @@ STATICFILES_DIRS = [
     BASE_DIR / 'blog/static',
 ]
 
-# WhiteNoise configuration for serving static files
+# Storage configuration
 # Use Supabase Storage for media files in production
 if os.environ.get('SUPABASE_URL'):
     STORAGES = {
@@ -183,7 +182,7 @@ if os.environ.get('SUPABASE_URL'):
             "BACKEND": "pandastories.storage_backends.SupabaseStorage",
         },
         "staticfiles": {
-            "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
         },
     }
     MEDIA_URL = f"{os.environ.get('SUPABASE_URL')}/storage/v1/object/public/{os.environ.get('SUPABASE_BUCKET', 'media')}/"
@@ -194,7 +193,7 @@ else:
             "BACKEND": "django.core.files.storage.FileSystemStorage",
         },
         "staticfiles": {
-            "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
         },
     }
     MEDIA_URL = '/media/'
@@ -341,7 +340,11 @@ CKEDITOR_5_CONFIGS = {
     }
 }
 
-CKEDITOR_5_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+# CKEditor5 will use the default storage backend (Supabase in production)
+if os.environ.get('SUPABASE_URL'):
+    CKEDITOR_5_FILE_STORAGE = "pandastories.storage_backends.SupabaseStorage"
+else:
+    CKEDITOR_5_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 CKEDITOR_5_UPLOAD_PATH = "uploads/"
 
 # Debug Toolbar

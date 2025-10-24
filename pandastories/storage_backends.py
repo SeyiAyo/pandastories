@@ -1,8 +1,12 @@
 import os
 from django.core.files.storage import Storage
 from django.utils.deconstruct import deconstructible
+from django.core.files.base import ContentFile
 from supabase import create_client, Client
 from io import BytesIO
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 @deconstructible
@@ -15,29 +19,44 @@ class SupabaseStorage(Storage):
         self.bucket_name = os.environ.get('SUPABASE_BUCKET', 'media')
         
         if self.supabase_url and self.supabase_key:
-            self.client: Client = create_client(self.supabase_url, self.supabase_key)
+            try:
+                self.client: Client = create_client(self.supabase_url, self.supabase_key)
+                logger.info(f"Supabase storage initialized for bucket: {self.bucket_name}")
+            except Exception as e:
+                logger.error(f"Failed to initialize Supabase client: {e}")
+                self.client = None
         else:
+            logger.warning("Supabase credentials not found, storage will not work")
             self.client = None
     
     def _save(self, name, content):
         """Save file to Supabase Storage"""
         if not self.client:
-            raise ValueError("Supabase client not configured")
+            raise ValueError("Supabase client not configured. Set SUPABASE_URL and SUPABASE_KEY.")
         
-        # Read file content
-        if hasattr(content, 'read'):
-            file_content = content.read()
-        else:
-            file_content = content
-        
-        # Upload to Supabase
-        self.client.storage.from_(self.bucket_name).upload(
-            name,
-            file_content,
-            file_options={"content-type": self._get_content_type(name)}
-        )
-        
-        return name
+        try:
+            # Read file content
+            if hasattr(content, 'read'):
+                file_content = content.read()
+            else:
+                file_content = content
+            
+            # Upload to Supabase (upsert=True allows overwriting)
+            response = self.client.storage.from_(self.bucket_name).upload(
+                name,
+                file_content,
+                file_options={
+                    "content-type": self._get_content_type(name),
+                    "upsert": "true"
+                }
+            )
+            
+            logger.info(f"Successfully uploaded {name} to Supabase bucket {self.bucket_name}")
+            return name
+            
+        except Exception as e:
+            logger.error(f"Failed to upload {name} to Supabase: {e}")
+            raise
     
     def _open(self, name, mode='rb'):
         """Retrieve file from Supabase Storage"""
