@@ -84,7 +84,7 @@ MIDDLEWARE = [
     'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
-ROOT_URLCONF = 'PandaStories.urls'
+ROOT_URLCONF = 'pandastories.urls'
 
 TEMPLATES = [
     {
@@ -112,7 +112,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'PandaStories.wsgi.application'
+WSGI_APPLICATION = 'pandastories.wsgi.application'
 
 
 # Database
